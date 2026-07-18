@@ -1,0 +1,18 @@
+# Secrets — NEVER commit these
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# OS / editor noise
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# Local output (debates are written outside the repo by default; keep any local runs out too)
+debates/
