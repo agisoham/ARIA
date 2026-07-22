@@ -362,6 +362,27 @@ def layer2_screen(topic_brief: str, verdict: str, critique: str):
     return audit, redteam, ruling
 
 
+def parse_cast(spec: str) -> dict:
+    """Parse a --cast string 'quant=github:openai/gpt-4.1,advocate=github:...' into overrides."""
+    overrides = {}
+    for part in (spec or "").split(","):
+        part = part.strip()
+        if "=" in part and ":" in part:
+            sid, ps = part.split("=", 1)
+            prov, model = ps.split(":", 1)
+            if prov.strip().lower() in PROVIDERS:
+                overrides[sid.strip().lower()] = (prov.strip().lower(), model.strip())
+    return overrides
+
+
+def apply_casting(council: list[dict], overrides: dict) -> None:
+    for sid, (prov, model) in overrides.items():
+        for seat in council:
+            if seat is not None and SEAT_LIBRARY.get(sid, {}).get("name") == seat["name"]:
+                seat["provider"], seat["model"] = prov, model
+                print(f"   · cast {seat['name']} -> {prov}:{model}")
+
+
 def load_rescreen(path: str):
     """Read a filed verdict and pull out (original_topic, prior_verdict, missed_considerations, bias)."""
     text = open(path, encoding="utf-8").read()
@@ -486,6 +507,7 @@ def main() -> None:
     p.add_argument("--layer1-only", action="store_true", help="skip the Layer-2 re-screening pass")
     p.add_argument("--rescreen", metavar="VERDICT.md",
                    help="re-run a past debate, feeding in its own flagged missed considerations + bias")
+    p.add_argument("--cast", help="model casting, e.g. 'quant=github:openai/gpt-4.1,advocate=github:meta/...'")
     p.add_argument("--models", action="store_true", help="list reachable GitHub models and exit")
     args = p.parse_args()
 
@@ -500,6 +522,7 @@ def main() -> None:
         aug = build_rescreen_topic(otopic, verdict, missed, bias)
         cli_seats = [s.strip().lower() for s in args.seats.split(",")] if args.seats else None
         council = build_council(cli_seats or DEFAULT_SEATS)
+        apply_casting(council, parse_cast(args.cast))
         md = run_debate(aug, args.rounds, council, screen2=not args.layer1_only, title=display)
         print(f"\n✓ Re-screen filed: {save(display, md)}")
         return
@@ -515,11 +538,8 @@ def main() -> None:
     file_seats, topic = parse_seats(topic)
     overrides, topic = parse_models(topic)
     council = build_council(cli_seats or file_seats or DEFAULT_SEATS)
-    for seat_id, (provider, model) in overrides.items():
-        for seat in council:
-            if seat is not None and SEAT_LIBRARY.get(seat_id, {}).get("name") == seat["name"]:
-                seat["provider"], seat["model"] = provider, model
-                print(f"   · cast {seat['name']} -> {provider}:{model}")
+    apply_casting(council, overrides)          # from the topic file's `models:` line
+    apply_casting(council, parse_cast(args.cast))  # --cast overrides the file
 
     markdown = run_debate(topic, args.rounds, council, screen2=not args.layer1_only)
     path = save(topic, markdown)
