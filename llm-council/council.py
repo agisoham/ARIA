@@ -151,7 +151,7 @@ regulations: SEBI rules and broker terms for India; for US access as an Indian r
 residents, 25% treaty rate on dividends), SEC/FINRA rules (PDT rule eliminated 2026), and US broker terms
 (e.g. Alpaca offers free unlimited paper trading via API; IBKR for full market access). Architecture is the
 Dual Barbell: a conservative Core (~70%) walled off from a small, capped Aggressive Alpha sleeve (~30%).
-Builder is a solo 18-year-old in India with no budget and only free-tier tooling. Currently Phase 0:
+Builder is a solo developer in India on a limited budget, using only free-tier tooling. Currently Phase 0:
 architecture, no trading code yet. Method: debate before build; prove before risk; protect the Core always."""
 
 REQUEST_PAUSE = 6.0

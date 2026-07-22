@@ -26,7 +26,7 @@ ever re-argued from scratch.
 | 1 | Validate strategy edge on existing platforms (Streak / AlgoTest) | Zero (paper) |
 | 2 | Build the foundation — data pipeline, backtester, Risk Guardian | Zero (paper) |
 | 3 | Differentiators — regime detection (news/sentiment deferred pending proven edge) | Zero (paper) |
-| 4 | Tiny live capital, treated as tuition | ₹10–25k, optional |
+| 4 | Tiny live capital, treated as tuition | Small, optional |
 | 5 | Aggressive Alpha sleeve | Capped, optional |
 
 Each phase is gated: capital is never deployed before the thing that protects it is proven on paper.
@@ -53,6 +53,7 @@ A public wiki lives in [`docs/`](docs/):
 - [Philosophy](docs/philosophy.md) — goals, the Dual Barbell, the survive-don't-predict stance.
 - [Roadmap](docs/roadmap.md) — the gated phases and their exit gates.
 - [Decision log](docs/decisions.md) — every council verdict, dated.
+- [Safe agentic development](docs/agentic-safety.md) — how an AI coding agent builds this without ever being able to touch real money.
 
 ## What's in this repo
 - **[`llm-council/`](llm-council/)** — the automated multi-model debate engine (runs entirely on
