@@ -39,7 +39,7 @@ Lifecycle hooks (`PreToolUse`, `PostToolUse`, `SessionStart`) can run a command 
 action**. This is where survivability is enforced in code rather than in discipline:
 - **PreToolUse (on shell/exec):** block any command that looks like live execution — anything
   containing a live-order endpoint, a `--live` flag, or real-money markers. This is the seatbelt
-  for "never lose money": even if the agent (or a bug, or a bad prompt) tries, it can't.
+  for capital preservation: even if the agent (or a bug, or a bad prompt) tries, it can't.
 - **PostToolUse (on file write):** auto-format and run a fast test pass — catch breakage instantly.
 - **SessionStart:** print the current guardrails so every session starts grounded.
 

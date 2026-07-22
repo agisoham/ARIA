@@ -14,7 +14,9 @@ non-negotiable.
 
 ## Goal hierarchy
 1. **Learn** — the primary, guaranteed return.
-2. **Never lose money** — survivability drives every design decision.
+2. **Preserve capital** — survivability and controlled risk take priority over maximising return; every
+   design decision is made worst-case first. (No system can *guarantee* no losses — the discipline is to
+   make ruin structurally hard, not to promise it never happens.)
 3. **Earn — a real objective**, strictly within all applicable market regulations and broker terms.
 
 The **Dual Barbell** reconciles goals 2 and 3: a conservative Core (~70%) guarantees survival,
