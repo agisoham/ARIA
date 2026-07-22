@@ -3,6 +3,16 @@
 *.env
 !.env.example
 
+# Local publish tooling — stays on your machine, never public
+publish.bat
+sync.bat
+update.bat
+scan.py
+
+# Private strategy topics — publish only the neutral template
+llm-council/topics/*
+!llm-council/topics/_template.md
+
 # Python
 __pycache__/
 *.pyc

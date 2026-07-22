@@ -362,7 +362,33 @@ def layer2_screen(topic_brief: str, verdict: str, critique: str):
     return audit, redteam, ruling
 
 
-def run_debate(topic: str, rounds: int, council: list[dict], screen2: bool = True) -> str:
+def load_rescreen(path: str):
+    """Read a filed verdict and pull out (original_topic, prior_verdict, missed_considerations, bias)."""
+    text = open(path, encoding="utf-8").read()
+    cut = re.search(r"\n##\s*(Layer 1|Verdict)", text)
+    topic = (text[:cut.start()] if cut else text).strip()
+    def section(pat):
+        m = re.search(pat, text, re.DOTALL | re.IGNORECASE)
+        return m.group(1).strip() if m else ""
+    verdict = section(r"##\s*(?:Layer 1 . )?Verdict[^\n]*\n(.+?)(?:\n##|\Z)")[:700]
+    missed = section(r"##\s*Reflection \(Critic\)\s*\n(.+?)(?:\n##|\Z)")[:1200]
+    bias = section(r"Bias Auditor:\*{0,2}\s*(.+?)(?:\*\*Red Team|</details>|\Z)")[:800]
+    return topic, verdict, missed, bias
+
+
+def build_rescreen_topic(topic, verdict, missed, bias) -> str:
+    parts = [topic, "\n\n## RE-SCREENING MANDATE",
+             "This is a SECOND-PASS re-screening of a prior council verdict — question it afresh.",
+             f"\nPRIOR VERDICT:\n{verdict}",
+             f"\nMISSED CONSIDERATIONS flagged last time (address each directly):\n{missed or '(none recorded)'}"]
+    if bias:
+        parts.append(f"\nSYSTEMIC BIAS to consciously counteract this time:\n{bias}")
+    parts.append("\nRe-debate on the merits: engage the missed considerations, correct for the bias, "
+                 "and CONFIRM or OVERTURN the prior verdict — do not simply defer to it.")
+    return "\n".join(parts)
+
+
+def run_debate(topic: str, rounds: int, council: list[dict], screen2: bool = True, title: str = None) -> str:
     heal_models(council + [CRITIC, CHAIR] + ([LAYER2_AUDITOR, LAYER2_REDTEAM] if screen2 else []))
     print(f"\n=== DEBATE: {topic[:80]}{'...' if len(topic) > 80 else ''} ===")
     print("Panel: " + ", ".join(f"{s['name']}" for s in council) + f"  |  {rounds} rounds\n")
@@ -411,7 +437,7 @@ def run_debate(topic: str, rounds: int, council: list[dict], screen2: bool = Tru
 
     layer2 = layer2_screen(topic_brief, verdict, critique) if screen2 else None
 
-    return render_markdown(topic, rounds, council, transcript, critique, verdict, layer2)
+    return render_markdown(title or topic, rounds, council, transcript, critique, verdict, layer2)
 
 
 def render_markdown(topic, rounds, council, transcript, critique, verdict, layer2=None) -> str:
@@ -458,11 +484,24 @@ def main() -> None:
     p.add_argument("--seats", help="comma-separated seats: " + ", ".join(SEAT_LIBRARY))
     p.add_argument("--rounds", type=int, default=3)
     p.add_argument("--layer1-only", action="store_true", help="skip the Layer-2 re-screening pass")
+    p.add_argument("--rescreen", metavar="VERDICT.md",
+                   help="re-run a past debate, feeding in its own flagged missed considerations + bias")
     p.add_argument("--models", action="store_true", help="list reachable GitHub models and exit")
     args = p.parse_args()
 
     if args.models:
         list_github_models()
+        return
+
+    if args.rescreen:
+        otopic, verdict, missed, bias = load_rescreen(args.rescreen)
+        first = next((ln.lstrip("# ").strip() for ln in otopic.splitlines() if ln.strip()), "decision")
+        display = f"RE-SCREEN — {first[:70]}"
+        aug = build_rescreen_topic(otopic, verdict, missed, bias)
+        cli_seats = [s.strip().lower() for s in args.seats.split(",")] if args.seats else None
+        council = build_council(cli_seats or DEFAULT_SEATS)
+        md = run_debate(aug, args.rounds, council, screen2=not args.layer1_only, title=display)
+        print(f"\n✓ Re-screen filed: {save(display, md)}")
         return
 
     topic = args.topic
