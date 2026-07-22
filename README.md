@@ -25,7 +25,7 @@ ever re-argued from scratch.
 | 0 *(current)* | Research & architecture council | Zero |
 | 1 | Validate strategy edge on existing platforms (Streak / AlgoTest) | Zero (paper) |
 | 2 | Build the foundation — data pipeline, backtester, Risk Guardian | Zero (paper) |
-| 3 | Differentiators — sentiment & regime detection | Zero (paper) |
+| 3 | Differentiators — regime detection (news/sentiment deferred pending proven edge) | Zero (paper) |
 | 4 | Tiny live capital, treated as tuition | ₹10–25k, optional |
 | 5 | Aggressive Alpha sleeve | Capped, optional |
 
@@ -35,10 +35,17 @@ the learning, and the discipline of proving any edge honestly (walk-forward vali
 out-of-sample evidence, no curve-fitting).
 
 ## Council verdicts so far
-- **Dual Barbell split → DEFER** — prototype Core/Alpha isolation and prove it in paper trading
-  before committing (the council refused to accept the barbell as a narrative).
-- **Custom sentiment/news engine → DEFER** — no proven retail-level alpha in free-tier sentiment
-  for Indian markets; revisit only after the Core is proven, using strictly legal data sources.
+The council is deliberately hard to convince — most ideas are deferred until there's evidence, not
+adopted on a story. Highlights (full log in [docs/decisions.md](docs/decisions.md)):
+- **Dual Barbell structure → DEFER** — prove Core/Alpha isolation in a paper-traded prototype first.
+- **Barbell ratio & sizing → DEFER (capped pilot)** — don't lock a number; run a small, reversible
+  pilot, with the Alpha sleeve as a hard *cap* and fractional-Kelly sizing deployment within it.
+- **Crisis stress-test library → DEFER** — the two-layer screening *reversed its own earlier BUILD*
+  once it caught that free, realistic crisis-era data may not exist; audit the data first.
+- **Sentiment/news engine, stat-arb, options-pricing, order-book simulator → DEFER**, each with a
+  concrete next step; **ML-trained-on-crises → DROP** (tiny sample, overfitting trap).
+
+The reversal is the whole point: a second screening layer exists to catch the first layer's blind spots.
 
 ## Documentation
 A public wiki lives in [`docs/`](docs/):
