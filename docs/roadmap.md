@@ -8,7 +8,7 @@ along at zero cost via free paper-trading APIs.
 |---|---|---|
 | 0 | Research & automated architecture council | Zero |
 | 1 | Validate edge on existing platforms (India) + Alpaca paper (US) | Zero (paper) |
-| 2 | Build the foundation — Core only, incl. a crisis stress-test gate | Zero (paper) |
+| 2 | Build the foundation — Core only, with anti-overfit rigor (walk-forward, purged CV, deflated Sharpe) and cost modelling | Zero (paper) |
 | 3 | Differentiators — regime detection (news/sentiment only if re-justified) | Zero (paper) |
 | 4 | Tiny live capital, treated as tuition (India first; US only at scale) | Small, optional |
 | 5 | Aggressive Alpha sleeve | Capped, optional |
