@@ -1,74 +1,59 @@
-# LLM Council 🏛️
+# ARIA Council Engine
 
-**Automated multi-model debate for architecture decisions — on 100% free LLM APIs.**
+Automated multi-model architecture debate. You name a decision → four persona-models
+argue it over rounds → a Grok Chair issues a verdict (**BUILD / BUY / DEFER / DROP** +
+one next action) → the transcript is filed in `../02 - Council Debates/`.
 
-Before committing weeks to a big technical decision, submit it to a council of AI agents with
-deliberately **conflicting mandates** — a statistical purist, a survival-obsessed risk manager, a
-buildability realist, a build-vs-buy pragmatist, and a steelman advocate. They argue over multiple
-rounds, each seeing and rebutting the others. A non-voting **Critic** then reviews the debate for
-groupthink, and a **Chair** issues a calibrated verdict: **BUILD / BUY / DEFER / DROP** plus one
-concrete next action. The full transcript is saved as Markdown (Obsidian-friendly).
+## The free keys you need (no credit card, ever)
 
-Born as the decision engine for ARIA, a solo-built algorithmic trading learning project, where the
-rule is *debate before build, prove before risk*.
+| Key | Where to get it (free) | Unlocks |
+|---|---|---|
+| `GITHUB_TOKEN` | github.com → Settings → Developer settings → **Personal access tokens** (fine-grained, no scopes needed for Models) | GPT-4.1, DeepSeek R1, Llama 4, Mistral, **Grok 3** — the whole council in one key |
+| `GOOGLE_API_KEY` | **aistudio.google.com** → *Get API key* (your working Google/UPI account) | Gemini Flash — your native rail |
+| `GROQ_API_KEY` *(optional)* | **console.groq.com** → API Keys | fast Llama 3.3 70B |
+| `CEREBRAS_API_KEY` *(optional)* | **cloud.cerebras.ai** → API Keys | ~1M tokens/day |
 
-## Why conflicting incentives?
-A single AI advisor tends to agree with you. Give each agent an opposing mandate and weak ideas get
-attacked from several directions at once — an idea only survives if it withstands the quant's demand
-for evidence, the risk manager's fear of ruin, the engineer's buildability test, and the pragmatist's
-"why not just buy it?" challenge. The Advocate seat ensures the *strongest case for* is also on the
-table, so the council doesn't reject everything by default.
+GitHub Models alone is enough to run the full council. The others are speed/volume backups.
 
-## Features
-- **Genuinely different models disagree** — seats run across model families (GPT-4.1, Llama 4,
-  DeepSeek R1, Gemini, Grok…) via GitHub Models and Google AI Studio, all on free tiers.
-- **Per-topic panels** — pick seats per decision (`--seats quant,risk,advocate,nlp`), or add a
-  `seats: ...` line to a topic file. Domain seats included: NLP/data-signal and compliance.
-- **Reflection pass** — a Critic flags groupthink and blind spots before the verdict.
-- **Chair calibration** — the Chair may not be more cautious than the most cautious seat without
-  stating a justification (prevents "DEFER → DROP" overshoot).
-- **Self-healing model IDs** — model names drift on free catalogs; the script validates each seat
-  against the live catalog and swaps stale IDs for sensible equivalents (never a vision/code model).
-- **Rate-limit aware** — paced calls, 429-aware backoff, and bounded prompts that respect the 8K
-  input cap on free endpoints.
+## Run it
 
-## Quickstart
 ```bash
-pip install openai            # every provider speaks the OpenAI Chat API
-cp .env.example .env          # add your free keys (GitHub token needs models:read)
+pip install openai --break-system-packages
+export GITHUB_TOKEN=...            # and GOOGLE_API_KEY=... if you want Gemini seats
 
-python council.py --models                                  # list models your token can reach
-python council.py "Should we build X or buy it?"            # default 5-seat panel, 3 rounds
-python council.py --topic-file topics/example-topic.md      # rich topic + custom panel
-python council.py "..." --seats quant,risk,advocate --rounds 2   # lean & fast
+python council.py --models         # print the exact model ids your token can reach
+python council.py "Should ARIA commit to the Dual Barbell split?" --rounds 2
 ```
 
-Verdicts are written to `ARIA_DEBATES_DIR` (default: `../02 - Council Debates`, set it in `.env`).
+The verdict `.md` appears in the Codex automatically.
 
-## Free keys (no credit card)
-| Key | Where | Unlocks |
-|---|---|---|
-| `GITHUB_TOKEN` | GitHub → Settings → Developer settings → fine-grained PAT, **models:read** permission | GPT-4.1, Llama 4, DeepSeek R1, Mistral, Grok 3 — one key, whole council |
-| `GOOGLE_API_KEY` | aistudio.google.com | Gemini Flash |
-| `GROQ_API_KEY` / `CEREBRAS_API_KEY` | consoles | optional speed/volume backups |
+## Notes
+- Every seat speaks the OpenAI Chat API, so all providers use one client.
+- GitHub Models has low free limits (~10–15 req/min, 8K-in/4K-out); the script paces
+  calls and only feeds each agent the most recent round to stay inside the window.
+- Model ids drift — if a seat errors, run `--models` and paste a current id into
+  `COUNCIL` / `CHAIR` at the top of `council.py`.
+- Swap any seat to Gemini/Groq/Cerebras by changing its `provider` + `model`.
 
-**Free-tier realities** (learned the hard way): reasoning models (DeepSeek R1) have the tightest
-quotas — use them for single-shot roles (Critic), not per-round seats. Gemini's daily cap resets on
-US Pacific time. Big panels × many rounds × many reruns will hit limits; the lean panel
-(`--seats quant,risk,advocate` + `--rounds 2`) is the reliable daily driver.
+## Two-layer screening
+No verdict is trusted on a single pass. After Layer 1 (debate → Critic → calibrated Chair),
+**Layer 2** automatically re-screens the result:
+- **Bias Auditor** names the systemic bias in the panel's composition/framing most likely to have
+  skewed the verdict (survivability-bias, status-quo bias, novelty-aversion…).
+- **Red Team** argues the verdict is *wrong*, using the audited bias + the Critic's missed points,
+  and names the alternative verdict.
+- **Chair** issues a second-layer ruling: **CONFIRM** or **REVISE** (with the same calibration rule).
 
-## The seats
-| Seat | Mandate | Core question |
-|---|---|---|
-| Quant Purist | Statistical-edge zealot | Evidence, or just a story? |
-| Risk Manager | Survival-obsessed permabear | What's the worst case — does it end the game? |
-| Systems Engineer | Buildability realist | Can one person build & maintain this in time? |
-| Pragmatist | Build-vs-buy challenger | Why build what already exists? |
-| Advocate | Steelman | What's the strongest honest case FOR? |
-| Data-Signal Specialist | NLP/quant-data expert | Is there a real, extractable signal? |
-| Compliance & Data-Rights | Regulation & ToS | Is this legal and licence-clean? |
-| Critic *(non-voting)* | Reflection pass | Where's the groupthink? What was missed? |
-| Chair | Calibrated synthesis | BUILD / BUY / DEFER / DROP + one next action |
+Every debate file gets a "Layer 2 — Re-screening" section. Add `--layer1-only` to skip it (saves
+~3 calls on quota-tight days).
 
-## License
-MIT — see [LICENSE](LICENSE).
+## Roles, reflection & calibration
+- **Panel is configurable per topic.** Available seats: `quant, risk, systems, pragmatist,
+  advocate, nlp, compliance`. Default = quant, risk, systems, pragmatist, advocate.
+  - Set them with `--seats quant,risk,advocate,nlp` **or** a `seats: ...` line at the top of a topic file.
+- **Advocate seat** steelmans the proposal so the board never rejects by default (fixes the
+  built-in "everyone defaults to caution" bias).
+- **Reflection pass:** a non-voting **Critic** reviews the debate for groupthink and blind spots
+  before the Chair rules.
+- **Chair calibration:** the Chair may not return a verdict more cautious than the most cautious
+  individual seat without stating a justification (stops DEFER→DROP overshoot).

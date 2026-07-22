@@ -40,6 +40,13 @@ out-of-sample evidence, no curve-fitting).
 - **Custom sentiment/news engine → DEFER** — no proven retail-level alpha in free-tier sentiment
   for Indian markets; revisit only after the Core is proven, using strictly legal data sources.
 
+## Documentation
+A public wiki lives in [`docs/`](docs/):
+- [Methodology](docs/methodology.md) — the LLM Council & two-layer screening (the interesting part).
+- [Philosophy](docs/philosophy.md) — goals, the Dual Barbell, the survive-don't-predict stance.
+- [Roadmap](docs/roadmap.md) — the gated phases and their exit gates.
+- [Decision log](docs/decisions.md) — every council verdict, dated.
+
 ## What's in this repo
 - **[`llm-council/`](llm-council/)** — the automated multi-model debate engine (runs entirely on
   free LLM APIs). Usable for any project's architecture decisions, not just ARIA's. See its README.

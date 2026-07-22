@@ -117,9 +117,25 @@ CRITIC = dict(
             "(e.g. everyone defaulting to caution), (3) name the most important consideration the council MISSED. "
             "Be brief and specific.")
 
+# ---- Layer 2: re-screening (bias audit + red team + second ruling) ----
+# Every Layer-1 verdict is stress-tested a second time: audit the panel's systemic bias,
+# red-team the verdict using the Critic's missed considerations, then CONFIRM or REVISE.
+LAYER2_AUDITOR = dict(
+    name="Bias Auditor", provider="github", model="openai/gpt-4.1",
+    mandate="You are the BIAS AUDITOR. You do NOT re-argue the decision — you audit the PROCESS. "
+            "Name the single systemic bias in this panel's composition or framing most likely to have "
+            "skewed the verdict (e.g. survivability-bias toward DEFER/DROP, status-quo bias, "
+            "novelty-aversion, solo-builder timidity), and the one consideration the whole panel "
+            "structurally under-weighted. Be concrete and brief.")
+LAYER2_REDTEAM = dict(
+    name="Red Team", provider="google", model="gemini-3.5-flash",
+    mandate="You are the RED TEAM. Your sole job is to argue that the Layer-1 verdict is WRONG. Use the "
+            "audited bias and the Critic's missed considerations to build the strongest possible case for a "
+            "DIFFERENT verdict, and state which one (BUILD / BUY / DEFER / DROP) it points to.")
+
 # The Chair synthesises — with an explicit calibration rule against over-cautious verdicts.
 CHAIR = dict(
-    name="Chair", provider="github", model="xai/grok-3",
+    name="Chair", provider="github", model="openai/gpt-4.1",
     mandate="You are the CHAIR. You synthesise; you do not take a side during the debate. "
             "CALIBRATION RULE — verdict severity order, most to least cautious: DROP > DEFER > BUY > BUILD. "
             "Your verdict must NOT be more cautious than the most cautious *individual seat vote* unless you state, "
@@ -299,8 +315,55 @@ def parse_seats(text: str):
     return (ids or None), cleaned
 
 
-def run_debate(topic: str, rounds: int, council: list[dict]) -> str:
-    heal_models(council + [CRITIC, CHAIR])
+def parse_models(text: str):
+    """Pull an optional per-topic casting line and return (overrides, cleaned_text).
+
+    Syntax (one line):  models: quant=github:deepseek/deepseek-r1, advocate=google:gemini-3.5-flash
+    Maps seat id -> (provider, model). Lets each debate cast its strongest model
+    into its pivotal seat without editing this file."""
+    m = re.search(r"^\s*(?:<!--\s*)?models:\s*(.+?)\s*(?:-->)?\s*$", text, re.IGNORECASE | re.MULTILINE)
+    if not m:
+        return {}, text
+    overrides = {}
+    for part in m.group(1).split(","):
+        part = part.strip()
+        if "=" not in part or ":" not in part:
+            continue
+        seat_id, spec = part.split("=", 1)
+        provider, model = spec.split(":", 1)
+        if provider.strip().lower() in PROVIDERS:
+            overrides[seat_id.strip().lower()] = (provider.strip().lower(), model.strip())
+    cleaned = (text[:m.start()] + text[m.end():]).strip()
+    return overrides, cleaned
+
+
+def layer2_screen(topic_brief: str, verdict: str, critique: str):
+    """Layer 2: re-screen a Layer-1 verdict for systemic bias and missed considerations.
+    Returns (audit, redteam, ruling)."""
+    print("  · Layer 2: bias audit")
+    audit = _strip_think(ask(
+        LAYER2_AUDITOR, f"{LAYER2_AUDITOR['mandate']}\n\nARIA CONTEXT:\n{ARIA_CONTEXT}",
+        f"DECISION:\n{topic_brief}\n\nLAYER-1 VERDICT:\n{verdict}\n\nCRITIC'S REVIEW:\n{critique[:1500]}\n\n"
+        "Name the systemic bias and the structurally under-weighted consideration now. <150 words.",
+        max_tokens=600))
+    print("  · Layer 2: red team")
+    redteam = _strip_think(ask(
+        LAYER2_REDTEAM, f"{LAYER2_REDTEAM['mandate']}\n\nARIA CONTEXT:\n{ARIA_CONTEXT}",
+        f"DECISION:\n{topic_brief}\n\nLAYER-1 VERDICT:\n{verdict}\n\nBIAS AUDIT:\n{audit[:1200]}\n\n"
+        "Make the strongest case the Layer-1 verdict is WRONG, and name the alternative verdict. <180 words.",
+        max_tokens=700))
+    print("  · Layer 2: second-layer ruling")
+    ruling = _strip_think(ask(
+        CHAIR, f"{CHAIR['mandate']}\n\nARIA CONTEXT:\n{ARIA_CONTEXT}",
+        f"DECISION:\n{topic_brief}\n\nLAYER-1 VERDICT:\n{verdict}\n\nBIAS AUDIT:\n{audit[:1000]}\n\n"
+        f"RED TEAM:\n{redteam[:1200]}\n\nSecond-layer ruling: either **CONFIRM** (Layer-1 verdict survives "
+        "re-screening) or **REVISE** to a stated verdict. One sentence of justification. Obey the calibration rule.",
+        max_tokens=500))
+    return audit, redteam, ruling
+
+
+def run_debate(topic: str, rounds: int, council: list[dict], screen2: bool = True) -> str:
+    heal_models(council + [CRITIC, CHAIR] + ([LAYER2_AUDITOR, LAYER2_REDTEAM] if screen2 else []))
     print(f"\n=== DEBATE: {topic[:80]}{'...' if len(topic) > 80 else ''} ===")
     print("Panel: " + ", ".join(f"{s['name']}" for s in council) + f"  |  {rounds} rounds\n")
 
@@ -346,18 +409,26 @@ def run_debate(topic: str, rounds: int, council: list[dict]) -> str:
         "BUILD, BUY, DEFER, or DROP — obeying the calibration rule, (3) ONE concrete next action. Keep it tight.")
     verdict = _strip_think(ask(CHAIR, f"{CHAIR['mandate']}\n\nARIA CONTEXT:\n{ARIA_CONTEXT}", chair_user, max_tokens=1000))
 
-    return render_markdown(topic, rounds, council, transcript, critique, verdict)
+    layer2 = layer2_screen(topic_brief, verdict, critique) if screen2 else None
+
+    return render_markdown(topic, rounds, council, transcript, critique, verdict, layer2)
 
 
-def render_markdown(topic, rounds, council, transcript, critique, verdict) -> str:
+def render_markdown(topic, rounds, council, transcript, critique, verdict, layer2=None) -> str:
     today = dt.date.today().isoformat()
     panel = ", ".join(f"{s['name']} (`{s['model']}`)" for s in council)
     lines = [f"# {topic}", "",
-             f"*Automated council debate · {today} · {rounds} rounds*", "",
+             f"*Automated council debate · {today} · {rounds} rounds · two-layer screening*", "",
              f"**Panel:** {panel}", "",
-             "## Verdict (Chair)", "", verdict, "",
-             "## Reflection (Critic)", "", critique, "",
-             "---", "", "## Full transcript", ""]
+             "## Layer 1 — Verdict (Chair)", "", verdict, "",
+             "## Reflection (Critic)", "", critique, ""]
+    if layer2:
+        audit, redteam, ruling = layer2
+        lines += ["## Layer 2 — Re-screening", "",
+                  "**Second-layer ruling:**", "", ruling, "",
+                  "<details><summary>Bias audit &amp; red team</summary>", "",
+                  "**Bias Auditor:** " + audit, "", "**Red Team:** " + redteam, "", "</details>", ""]
+    lines += ["---", "", "## Full transcript", ""]
     per_round = len(council)
     model_by_name = {s["name"]: s["model"] for s in council}
     for i, (who, txt) in enumerate(transcript):
@@ -386,6 +457,7 @@ def main() -> None:
     p.add_argument("--topic-file", help="read the decision (and optional 'seats:' line) from a file")
     p.add_argument("--seats", help="comma-separated seats: " + ", ".join(SEAT_LIBRARY))
     p.add_argument("--rounds", type=int, default=3)
+    p.add_argument("--layer1-only", action="store_true", help="skip the Layer-2 re-screening pass")
     p.add_argument("--models", action="store_true", help="list reachable GitHub models and exit")
     args = p.parse_args()
 
@@ -402,9 +474,15 @@ def main() -> None:
 
     cli_seats = [s.strip().lower() for s in args.seats.split(",")] if args.seats else None
     file_seats, topic = parse_seats(topic)
+    overrides, topic = parse_models(topic)
     council = build_council(cli_seats or file_seats or DEFAULT_SEATS)
+    for seat_id, (provider, model) in overrides.items():
+        for seat in council:
+            if seat is not None and SEAT_LIBRARY.get(seat_id, {}).get("name") == seat["name"]:
+                seat["provider"], seat["model"] = provider, model
+                print(f"   · cast {seat['name']} -> {provider}:{model}")
 
-    markdown = run_debate(topic, args.rounds, council)
+    markdown = run_debate(topic, args.rounds, council, screen2=not args.layer1_only)
     path = save(topic, markdown)
     print(f"\n✓ Verdict filed: {path}")
 
