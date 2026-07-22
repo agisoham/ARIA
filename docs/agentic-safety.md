@@ -60,7 +60,8 @@ The biggest risk in quant code isn't bugs, it's fooling yourself:
 ## 5. Secrets & isolation
 - `.env` gitignored; no key ever committed (rotate immediately if one slips).
 - Live-execution code disabled by default, behind a flag requiring a manual human step.
-- A pre-publish secret scan gate before anything reaches a public repo.
+- A **gitleaks** pre-commit hook (entropy + heuristics) scanning every commit before anything
+  reaches a public repo — see `.pre-commit-config.yaml`.
 
 ## Checklist
 - [ ] Rules file with hard guardrails, read every session.

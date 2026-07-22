@@ -1,0 +1,14 @@
+# Secret scanning on every commit — industry-standard, entropy + heuristics.
+# One-time setup:  pip install pre-commit  &&  pre-commit install
+# Then gitleaks runs automatically on every `git commit`.
+# (Bump `rev` to the latest gitleaks release periodically.)
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: detect-private-key
+      - id: check-added-large-files
