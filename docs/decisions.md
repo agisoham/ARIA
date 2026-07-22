@@ -7,7 +7,7 @@ red-team pass that can confirm or overturn the first verdict).
 | Decision | Verdict | One-line rationale |
 |---|---|---|
 | Dual Barbell split (as foundational structure) | **DEFER** | Prototype Core/Alpha isolation in paper trading before committing (re-screen confirmed). |
-| Barbell ratio & position sizing | **DEFER → capped pilot** | Don't lock a fixed ratio; run a small, reversible, capped pilot. Sizing to be a hard Alpha *cap* with fractional-Kelly deployment within it, set from measured data — not a chosen number. |
+| Barbell ratio & position sizing | **Model agreed; deployment DEFERRED** | Council accepted a cap + fractional-Kelly design (hard Alpha cap, Kelly-sized from deflated out-of-sample edge) and rejected fixed ratios. Actual Alpha allocation deferred to 0 until the Core is proven in isolation. |
 | Crisis Scenario Library (stress-replay gate) | **DEFER** | Re-screening reversed an earlier BUILD: without free, realistic crisis-era data, automated stress-tests give false assurance. Audit data availability first. |
 | Custom market-event sentiment/news engine | **DEFER** | No proven retail out-of-sample edge; costly/ToS-risky data. Research and paper-trade only, legal sources. |
 | Statistical arbitrage / pairs trading | **DEFER** | Defensible edge, but validate on a free platform with walk-forward + structural-break tests before any custom build. |

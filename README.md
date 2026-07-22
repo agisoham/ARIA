@@ -16,7 +16,8 @@ protects capital is proven on paper. What exists today is the research/decision 
 - ✅ **LLM Council** — multi-model debate engine (working code)
 - ✅ **Two-layer screening** — bias-audit + red-team re-screen of every verdict
 - ✅ **Decision log** — every verdict recorded and dated
-- ⬜ **Backtester** — walk-forward, purged CV, deflated Sharpe *(planned, Phase 2)*
+- ✅ **Validation & metrics harness** — walk-forward + purged CV splits, and **deflated Sharpe** (the overfit test) — `src/aria/`, unit-tested
+- ⬜ **Backtester engine** — run strategies through the harness on real data *(planned, Phase 2)*
 - ⬜ **Risk Guardian** — VaR/CVaR, drawdown limits, kill-switch *(planned, Phase 2)*
 - ⬜ **Paper trading** — India + US *(planned, Phase 2–3)*
 - ⬜ **Dashboard** *(planned, Phase 2–3)*
@@ -80,11 +81,15 @@ The reversal is the point: a second screening layer exists to catch the first la
 ## Repository structure
 ```
 ARIA/
-├── llm-council/          ✅ the multi-model debate engine (working code)
+├── src/aria/             ✅ validation harness + honest metrics
+│   ├── validation.py     leakage-free splits: walk-forward, purged K-fold w/ embargo
+│   └── metrics.py        Sharpe/Sortino/drawdown + Probabilistic & Deflated Sharpe (overfit test)
+├── tests/                ✅ unit tests  (run: pytest -q)
+├── llm-council/          ✅ the multi-model debate engine
 │   ├── council.py        the orchestrator (seats, two-layer screening, self-healing model IDs)
-│   └── topics/           a topic template (real strategy topics are kept private)
+│   └── topics/           a topic template (real strategy topics kept private)
 ├── docs/                 methodology · philosophy · roadmap · decisions · agentic-safety
-└── (planned) src/ · tests/ · research/   the trading system — Phase 2, not yet built
+└── (planned) research/ + strategies   Phase 2+, not yet built
 ```
 
 ## Documentation

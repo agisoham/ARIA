@@ -26,3 +26,8 @@ desktop.ini
 
 # Local output (debates are written outside the repo by default; keep any local runs out too)
 debates/
+
+.pytest_cache/
+.ruff_cache/
+data/
+*.db
