@@ -17,8 +17,8 @@ non-negotiable.
 2. **Never lose money** — survivability drives every design decision.
 3. **Earn — a real objective**, strictly within all applicable market regulations and broker terms.
 
-The **Dual Barbell** reconciles goals 2 and 3: a conservative Core (80–90%) guarantees survival,
-while a small, capped Aggressive Alpha sleeve (10–20%) pursues asymmetric upside and is allowed to
+The **Dual Barbell** reconciles goals 2 and 3: a conservative Core (~70%) guarantees survival,
+while a capped Aggressive Alpha sleeve (~30%) pursues asymmetric upside and is allowed to
 fail without ever threatening the Core. The two are kept strictly separate. Ambition expresses
 itself as a smarter Alpha sleeve — never a looser Core.
 

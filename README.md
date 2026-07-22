@@ -9,9 +9,9 @@ broker terms.
 
 ## Philosophy
 ARIA rejects the "predict the market" framing in favour of **manage uncertainty and survive**. The
-architecture is a **Dual Barbell**: a conservative Core (80–90% of any deployed capital, built for
-survivability and steady compounding) kept strictly separate from a small, capped Aggressive Alpha
-sleeve (10–20%) that can fail without threatening the Core.
+architecture is a **Dual Barbell**: a conservative Core (~70% of any deployed capital, built for
+survivability and steady compounding) kept strictly separate from a capped Aggressive Alpha
+sleeve (~30%) that can fail without threatening the Core.
 
 Every major architectural decision is pressure-tested *before code* by an automated
 **[LLM Council](llm-council/)** — AI agents with deliberately conflicting mandates that debate the
