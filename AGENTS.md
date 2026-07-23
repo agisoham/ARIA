@@ -25,6 +25,9 @@ Valuable whether the code is written by a human or an AI — these are never tra
 - Format + lint with `ruff`. Tests with `pytest`. Every public function ships a unit test.
 - A strategy is "validated" only after it passes walk-forward **and** a deflated-Sharpe check
   (`aria.metrics.deflated_sharpe_ratio`).
+- **Frequency-agnostic:** never hardcode a bar frequency. Data loaders, backtester, strategy
+  interfaces, and metrics take the timeframe as a parameter (e.g. `periods_per_year`), so the same
+  code runs on daily bars now and minute/second bars later without a rewrite.
 
 ## Commands
 - Install: `pip install -r requirements.txt`

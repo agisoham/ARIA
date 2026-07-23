@@ -14,6 +14,7 @@ red-team pass that can confirm or overturn the first verdict).
 | Options / derivatives pricing module | **DEFER** | Build as a separate, sandboxed learning module — not on the survivability-first core path. |
 | Limit order book simulator | **DEFER** | Not justified for a solo, daily-horizon system until a strategy demands sub-close execution modelling; audit free L2/L3 data first. |
 | ML models trained on crisis data | **DROP** | ~10-event sample — near-certain overfitting. |
+| Trading frequency | **Intraday direction; HFT out of scope** | Daily/swing near-term, intraday as the sanctioned direction; true HFT ruled out for a solo/free build. Built **frequency-agnostic** so it can be dialled to minutes/seconds later without a rewrite. |
 
 **Reading the pattern:** the council is skeptical of narratives and scope creep — most ideas are
 deferred until evidence exists, not adopted on a story. The two-layer screening even *reversed its

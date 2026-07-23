@@ -153,6 +153,16 @@ CHAIR = dict(
             "in one sentence, a specific justification for overriding it. Reflect the genuine balance of the debate "
             "and weigh the Advocate's best case fairly.")
 
+# Optional: route the single-call orchestration roles (Critic, Chair, Layer-2) to one model via
+# env, e.g. ARIA_ORCHESTRATOR=groq:llama-3.3-70b-versatile — handy when GitHub's daily cap is hit.
+# Public defaults stay GitHub-based; this only applies if the env var is set.
+_ORCH = os.environ.get("ARIA_ORCHESTRATOR", "")
+if ":" in _ORCH:
+    _op, _om = _ORCH.split(":", 1)
+    if _op.strip() in PROVIDERS:
+        for _role in (CRITIC, CHAIR, LAYER2_AUDITOR, LAYER2_REDTEAM):
+            _role["provider"], _role["model"] = _op.strip(), _om.strip()
+
 ARIA_CONTEXT = """\
 PROJECT: ARIA — a solo-built algorithmic trading system targeting BOTH Indian markets (NSE/BSE) and US
 markets. PRIMARY GOAL is learning ML, quant finance, and systems engineering. HARD RULE: never lose money
@@ -259,16 +269,35 @@ def google_model_ids() -> list[str]:
         return []
 
 
+def groq_model_ids() -> list[str]:
+    """List models available to this Groq key (OpenAI-compatible /models)."""
+    import httpx
+    base, key_env = PROVIDERS["groq"]
+    key = os.environ.get(key_env, "")
+    if not key:
+        return []
+    try:
+        r = httpx.get(base.rstrip("/") + "/models", headers={"Authorization": f"Bearer {key}"}, timeout=30)
+        r.raise_for_status()
+        data = r.json()
+        items = data.get("data", data) if isinstance(data, dict) else data
+        return [m["id"] for m in items if isinstance(m, dict) and m.get("id")]
+    except Exception:  # noqa: BLE001
+        return []
+
+
 def heal_models(seats: list[dict]) -> None:
     """Validate each seat's model against the provider's live catalog (case-insensitively).
     Keep anything that exists; only replace genuinely-missing ids, never downgrading to a
     vision/code/embedding/image model."""
     gh = github_catalog_ids()
     gg = google_model_ids()
+    gq = groq_model_ids()
     gh_lower = {i.lower(): i for i in gh}
     gg_lower = {i.lower(): i for i in gg}
+    gq_lower = {i.lower(): i for i in gq}
     gh_default = gh_lower.get("openai/gpt-4.1", gh[0] if gh else None)
-    if not gh and not gg:
+    if not gh and not gg and not gq:
         print("   (catalogs unavailable; using configured ids as-is)")
         return
     for seat in seats:
@@ -290,6 +319,17 @@ def heal_models(seats: list[dict]) -> None:
             bad = ("image", "tts", "lite", "vision", "live", "native", "-exp", "embedding")
             cand = [g for g in gg if "flash" in g.lower() and not any(b in g.lower() for b in bad)]
             choice = (sorted(cand, reverse=True) or gg)[0]
+        elif prov == "groq" and gq:
+            if want in gq_lower:
+                seat["model"] = gq_lower[want]
+                continue
+            _bad = ("guard", "whisper", "tts", "embed", "vision", "instant", "-8b", "prompt", "moderation")
+            chat = [g for g in gq if not any(b in g.lower() for b in _bad)]
+            key = "kimi" if "kimi" in want else ("llama" if "llama" in want else want.split("/")[-1].split("-")[0])
+            cand = [g for g in chat if key in g.lower()]
+            # safe default: a versatile 70B Llama chat model, never a guard/embedding model
+            default = next((g for g in chat if "llama-3.3-70b" in g.lower()), (chat or gq)[0])
+            choice = (cand or [default])[0]
         else:
             continue
         print(f"   · healed {seat['name']}: {seat['model']} -> {choice}")
