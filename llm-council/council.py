@@ -105,8 +105,19 @@ SEAT_LIBRARY = {
         mandate="You are the COMPLIANCE & DATA-RIGHTS seat: you know SEBI's retail-algo framework, exchange/broker "
                 "terms, and data-source ToS/licensing. You flag legal, regulatory, and terms-of-service risk. Core "
                 "question: 'Is this legal and within every relevant rule and licence — and what's the compliant way?'"),
+    "futureproof": dict(
+        name="Future-Proofer", provider="github", model="openai/gpt-4.1",
+        mandate="You are the FUTURE-PROOFER: you judge long-horizon relevance. Given the pace of change in "
+                "ML, quant methods, and tooling, ask whether this feature / technique / dependency will still be "
+                "relevant, maintained, and worth having in ~2+ years — or whether it is a fad, about to be "
+                "obsoleted by a newer approach, or a maintenance liability. Weigh: is the underlying trend "
+                "accelerating or fading; will the dependency survive and stay free; does a newer method already "
+                "dominate; is this a durable primitive or a transient wrapper? Core question: 'Will this still "
+                "matter in 2 years, or are we building on sand?'"),
 }
 
+# Default panel stays lean (5). Add the Future-Proofer with --seats when longevity is the crux,
+# e.g. adopting a framework/dependency or a trendy technique.
 DEFAULT_SEATS = ["quant", "risk", "systems", "pragmatist", "advocate"]
 
 # The Critic runs a reflection pass; it does not vote.

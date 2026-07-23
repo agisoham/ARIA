@@ -18,6 +18,12 @@ free platform, no custom build will create one*; Phase 2: *your code must reprod
 paper-trading results*. Phase 4 (live capital) is optional — staying on paper indefinitely is a
 valid end state given the capital-preservation rule.
 
+**Long-run architecture (planned).** Beyond trading, ARIA is being built to reason about its own
+history: a **Knowledge & Decision Graph** (decisions ↔ debates ↔ evidence ↔ strategies ↔ experiments,
+enabling GraphRAG for the council) and **experiment tracking** (MLflow, self-hosted) so every run —
+and the trial count the deflated Sharpe needs — is logged honestly. Free/local tooling only; built when
+the corpus justifies it, never on the near-term critical path.
+
 **Markets.** India (NSE/BSE) and US. US access for the builder runs through official remittance
 rules with treaty tax treatment; US paper trading (free, API-first) is the path for Phases 1–3,
 with real US capital deferred until it is justified at scale.

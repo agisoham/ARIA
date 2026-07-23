@@ -28,16 +28,19 @@ protects capital is proven on paper. What exists today is the research/decision 
 ```mermaid
 flowchart TD
   R["Research inputs<br/>arXiv · Consensus · Elicit"] --> C["LLM Council<br/>multi-model debate"]
+  KG["Knowledge &amp; Decision Graph<br/>GraphRAG (planned)"] -.-> C
   C --> S["Two-layer screening<br/>bias audit + red team"]
   S --> D["Decision Log<br/>BUILD · BUY · DEFER · DROP"]
+  D --> KG
   D --> B["Backtester<br/>walk-forward · purged CV · deflated Sharpe"]
+  B --> XT["Experiment Tracking<br/>MLflow (planned)"]
   B --> G["Risk Guardian<br/>VaR / CVaR · drawdown limits · kill-switch"]
   G --> P["Paper Trading"]
   P --> E["Execution<br/>disabled until proven · human-gated"]
   classDef done fill:#1f4e5f,stroke:#12303a,color:#ffffff;
   classDef todo fill:#20242a,stroke:#3a3f47,color:#c8ccd2;
   class R,C,S,D done;
-  class B,G,P,E todo;
+  class B,G,P,E,KG,XT todo;
 ```
 
 *Solid teal = built today; grey = planned, each gated behind proof on paper.*

@@ -21,6 +21,7 @@ pragmatist's "why not just buy it?" challenge — while an **Advocate** ensures 
 | Advocate | Steelman | What's the strongest honest case FOR? |
 | Data-Signal Specialist | NLP / quant-data expert | Is there a real, extractable signal? |
 | Compliance & Data-Rights | Regulation & ToS | Is this legal and licence-clean? |
+| Future-Proofer | Long-horizon relevance | Will this still matter in 2 years, or are we building on sand? |
 
 Panels are configurable per decision, and each seat can be cast to a specific model so the
 strongest reasoner sits in the pivotal seat.
