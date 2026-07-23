@@ -43,7 +43,7 @@ flowchart TD
   class B,G,P,E,KG,XT todo;
 ```
 
-*Solid teal = built today; grey = planned, each gated behind proof on paper.*
+*Solid teal = already built; grey = planned, each gated behind proof on paper.*
 
 ## What it is
 ARIA rejects "predict the market" in favour of **manage uncertainty and survive**. Its trading
