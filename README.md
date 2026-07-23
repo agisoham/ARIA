@@ -112,6 +112,19 @@ A public wiki lives in [`docs/`](docs/):
 
 Each phase is gated: capital is never deployed before the thing that protects it is proven on paper.
 
+## Development
+Repository-wide engineering constraints and AI-development guidelines are documented in
+[`AGENTS.md`](AGENTS.md) — they apply to any coding agent (Claude Code, Codex, Gemini CLI, Cursor,
+Aider, Continue…) and to human contributors.
+
+**Non-negotiable invariants** (canonical list in `AGENTS.md`):
+- Never introduce look-ahead bias.
+- Never expose secrets.
+- Never enable live trading by default.
+- Never suppress failing tests.
+- Never report backtest metrics without specifying the validation methodology.
+- Every new strategy requires accompanying tests and documentation.
+
 ## Compliance stance
 ARIA trades only its builder's own capital, within all applicable regulations in both target markets:
 - **India:** SEBI's retail algo-trading framework, exchange rules, and broker API terms.

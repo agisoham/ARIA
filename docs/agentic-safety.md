@@ -9,8 +9,9 @@ without ever being able to lose real money. It's reusable for any money-touching
 > by tooling, not by remembering. Everything is paper/simulated until a human explicitly flips a
 > switch that the agent cannot reach.
 
-## 1. An agent "constitution" (`CLAUDE.md` / rules file)
-Keep a short, always-true rules file the agent reads every session. The load-bearing lines:
+## 1. An agent "constitution" (`AGENTS.md` / rules file)
+Keep a short, always-true rules file the agent reads every session (ARIA uses `AGENTS.md`, the
+cross-tool standard). The load-bearing lines:
 
 ```markdown
 ## Absolute guardrails (never violate)
