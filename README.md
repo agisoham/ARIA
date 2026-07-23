@@ -10,8 +10,9 @@ backtesting, risk analysis, and hypothesis validation.
 > *Debate before you build. Prove before you risk. Preserve the Core, always.*
 
 ## Current status
-**Phase 0 — architecture & methodology.** By design, no trading code is written until the design that
-protects capital is proven on paper. What exists today is the research/decision engine, not a trading bot.
+**Phase 0 complete → entering Phase 1 (validation on existing platforms).** By design, no *custom*
+trading infrastructure is built until the strategy logic is shown to have an edge on free platforms
+first. What exists today is the research/decision engine and the validation harness — not a trading bot.
 
 - ✅ **LLM Council** — multi-model debate engine (working code)
 - ✅ **Two-layer screening** — bias-audit + red-team re-screen of every verdict
@@ -54,6 +55,23 @@ Core.
 Every major decision is pressure-tested *before code* by the **[LLM Council](llm-council/)** — agents
 with conflicting mandates debating across genuinely different models, then re-screened for bias, with a
 calibrated Chair issuing a verdict. Verdicts are logged so no decision is re-argued from scratch.
+
+## How ARIA differs from the typical "AI trading bot"
+The common genre — *"I gave an LLM some money and let it trade"* — puts a language model in the
+trader's seat, live, often leveraged, and (as its creators usually admit) running on luck. ARIA is
+the deliberate opposite:
+
+| Typical "AI trading bot" | ARIA |
+|---|---|
+| The **LLM makes the trades** | LLMs only **debate the design**; no agent may ever place a live trade (a hard invariant) |
+| Real, often **leveraged** money, fast | **Paper-first, no leverage** — zero capital until an edge is proven |
+| Ship it and watch (luck-driven) | **Prove it or drop it** — walk-forward + deflated Sharpe to catch overfit and luck |
+| Profit / content as the goal | **Learning + survivability** as the goal; preserve capital first |
+| Ad hoc, no memory | Every decision **debated, bias-screened, and logged** |
+
+The question ARIA asks isn't *"can a language model trade?"* — it's *"does this **strategy** have a
+real, honestly-validated edge before any capital is at risk?"* LLMs reason about the architecture;
+deterministic, tested strategies do the trading.
 
 ## Research standards & targets
 Goals are **methodological, not claimed results** — nothing is deployed:
