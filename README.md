@@ -120,6 +120,7 @@ A public wiki lives in [`docs/`](docs/):
 - [Roadmap](docs/roadmap.md) — the gated phases and their exit gates.
 - [Decision log](docs/decisions.md) — every council verdict, dated.
 - [Safe agentic development](docs/agentic-safety.md) — how an AI coding agent builds this without ever being able to touch real money.
+- [Concepts & methods](docs/concepts.md) — the quant/ML/systems methods ARIA uses and plans to (built vs planned, honestly marked).
 
 ## Roadmap (gated phases)
 | Phase | Focus | Capital at risk |
