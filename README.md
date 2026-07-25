@@ -144,17 +144,20 @@ ARIA/
 │   ├── metrics.py        Sharpe/Sortino/drawdown + Probabilistic & Deflated Sharpe (overfit test)
 │   └── experiment_log.py honest trial log — the trial count the deflated Sharpe needs
 ├── tests/                ✅ unit tests  (run: pytest -q)
+├── examples/             ✅ overfitting_demo.py — proof the harness catches luck
 ├── llm-council/          ✅ the multi-model debate engine
 │   ├── council.py        the orchestrator (seats, two-layer screening, self-healing model IDs)
 │   ├── examples/         a synthetic example debate (Layer 1 + Layer 2 shape)
 │   └── topics/           a topic template (real strategy topics kept private)
-├── docs/                 methodology · philosophy · roadmap · decisions · agentic-safety
+├── docs/                 methodology · philosophy · roadmap · decisions · agentic-safety · concepts
+├── .github/workflows/    CI — ruff + pytest on 3.11/3.12, and the demo must keep catching luck
 ├── CONTRIBUTING.md       how to run the tests + pose a new council topic
+├── SECURITY.md           secret handling + why this repo cannot place a live trade
 └── (planned) research/ + strategies   Phase 2+, not yet built
 ```
 
 ## Documentation
-A public wiki lives in [`docs/`](docs/):
+Full documentation lives in [`docs/`](docs/) (the [wiki](https://github.com/agisoham/ARIA/wiki) is a thin map to it, deliberately — one source of truth, no drift):
 - [Methodology](docs/methodology.md) — the LLM Council & two-layer screening (the interesting part).
 - [Philosophy](docs/philosophy.md) — goals, the Dual Barbell, the survive-don't-predict stance.
 - [Roadmap](docs/roadmap.md) — the gated phases and their exit gates.
