@@ -22,6 +22,7 @@ first. What exists today is the research/decision engine and the validation harn
 - ⬜ **Risk Guardian** — VaR/CVaR, drawdown limits, kill-switch *(planned, Phase 2)*
 - ⬜ **Paper trading** — India + US *(planned, Phase 2–3)*
 - ⬜ **Dashboard** *(planned, Phase 2–3)*
+- ⬜ **Grounded Q&A layer ("ARIA Chat")** — ask ARIA about its own signals, metrics, and decisions in English, answered only from real data via read-only tool-calls with citations — never a price prediction, never a trade *(planned, Phase 3)*
 - ⬜ **Live trading** — optional, human-gated, only after paper gates pass *(Phase 4+)*
 
 ## Architecture
@@ -38,10 +39,13 @@ flowchart TD
   B --> G["Risk Guardian<br/>VaR / CVaR · drawdown limits · kill-switch"]
   G --> P["Paper Trading"]
   P --> E["Execution<br/>disabled until proven · human-gated"]
+  B --> QA["Grounded Q&amp;A · ARIA Chat<br/>read-only · cited (planned)"]
+  D --> QA
+  KG -.-> QA
   classDef done fill:#1f4e5f,stroke:#12303a,color:#ffffff;
   classDef todo fill:#20242a,stroke:#3a3f47,color:#c8ccd2;
   class R,C,S,D done;
-  class B,G,P,E,KG,XT todo;
+  class B,G,P,E,KG,XT,QA todo;
 ```
 
 *Solid teal = already built; grey = planned, each gated behind proof on paper.*
@@ -128,7 +132,7 @@ A public wiki lives in [`docs/`](docs/):
 | 0 *(current)* | Research & architecture council | Zero |
 | 1 | Validate strategy edge on existing platforms (India) + Alpaca paper (US) | Zero (paper) |
 | 2 | Build the foundation — backtester (walk-forward, purged CV, deflated Sharpe), Risk Guardian | Zero (paper) |
-| 3 | Differentiators — regime detection (news/sentiment deferred pending proven edge) | Zero (paper) |
+| 3 | Differentiators — regime detection; grounded Q&A layer ("ARIA Chat") over ARIA's own data | Zero (paper) |
 | 4 | Tiny live capital, treated as tuition | Small, optional |
 | 5 | Aggressive Alpha sleeve | Capped, optional |
 

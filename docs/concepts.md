@@ -29,6 +29,7 @@ weighed and set aside (judgement, not omission).
 - ✅ **Reflection / self-correction · Chair calibration** — a non-voting Critic; a synthesis rule against over-cautious verdicts.
 - ✅ **Self-healing model IDs** — validate model names against the live provider catalog and auto-correct drift.
 - ⬜ **RAG · vector search (FAISS/Chroma) · knowledge graph / GraphRAG** — feed the council retrieved, connected evidence instead of priors.
+- ⬜ **Grounded Q&A layer + provenance** — an optional English interface to query ARIA's own signals, metrics, and decisions, answered only via read-only tool-calls with citations and a grounding-check — never a price prediction, never a trade. A two-window UI shows each answer beside the exact sources it's built from.
 - ⬜ **Bayesian decision engine / Bayesian optimisation** — probability-of-success sizing; overfit-safe tuning.
 - ✎ **FinBERT sentiment · reinforcement-learning trading core** — deferred / drop-leaning (overfit traps at this scale).
 
