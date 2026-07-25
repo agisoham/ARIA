@@ -77,6 +77,15 @@ The question ARIA asks isn't *"can a language model trade?"* — it's *"does thi
 real, honestly-validated edge before any capital is at risk?"* LLMs reason about the architecture;
 deterministic, tested strategies do the trading.
 
+## Talking to ARIA — a grounded Q&A layer *(planned, Phase 3)*
+Once ARIA is generating signals and logged results, a plain-English layer will let you ask about them —
+*"why did S1 go long today?"*, *"how has this strategy done out-of-sample?"* — held to the same standard
+as everything else. It answers **only from real data** via read-only tool-calls, **cites every number**,
+**abstains** when it doesn't know, and **refuses to predict prices or place trades**. A two-window UI puts
+the chat beside a live **provenance panel**, so every answer is traceable to its source — you *see* what
+it's based on, you don't just trust it. Even the way you talk to ARIA is held to the same
+prove-don't-claim, no-hallucination standard as the strategies themselves.
+
 ## Research standards & targets
 Goals are **methodological, not claimed results** — nothing is deployed:
 - **Capital preservation first** — every strategy prioritises survivability and controlled risk over
