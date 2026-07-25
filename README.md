@@ -174,7 +174,15 @@ ARIA trades only its builder's own capital, within all applicable regulations in
 No managing others' money, no market-manipulative patterns, honest tax treatment in both jurisdictions.
 
 ## Data sources & research stack
+Everything runs on free tiers — infrastructure cost is ~zero through Phase 3 by design.
 - **Market data:** free-tier APIs (e.g. Alpha Vantage for US; broker WebSockets for NSE).
+- **News & sentiment (free tier, no card):** Alpha Vantage `NEWS_SENTIMENT` (ticker-tagged, direction +
+  magnitude), Marketaux, Finnhub, Stockdata, and unlimited RSS (Moneycontrol, Economic Times, RBI, SEBI)
+  for Indian coverage. *Not adopted yet* — the sentiment engine is deferred; see
+  [docs/decisions.md](docs/decisions.md).
+- **Deliberately not used:** X/Twitter (no free tier since Feb 2026; now metered per post read — and its
+  edge is *latency*, which a daily-frequency system doesn't consume), Instagram (terms prohibit automated
+  collection; no market data), Telegram tip channels (adversarial noise).
 - **Research retrieval:** arXiv q-fin (via alphaXiv), Consensus, Elicit — feeding the council's evidence base.
 - **LLM providers for the council:** GitHub Models, Google AI Studio, Groq, Cerebras — all free tiers.
 
