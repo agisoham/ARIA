@@ -19,7 +19,7 @@ from aria.metrics import (
 )
 from aria.validation import purged_kfold_splits, walk_forward_splits
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 __all__ = [
     "ExperimentLog",
