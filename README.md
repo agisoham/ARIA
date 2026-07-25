@@ -1,5 +1,9 @@
 # ARIA — Adaptive Responsive Intelligence Architecture
 
+[![tests](https://github.com/agisoham/ARIA/actions/workflows/tests.yml/badge.svg)](https://github.com/agisoham/ARIA/actions/workflows/tests.yml)
+[![python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![license: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 **A survivability-first quantitative research & decision system — applied, first, to algorithmic trading (Indian + US markets).**
 
 At its core ARIA is an AI research-and-decision engine: every significant design choice is debated by
@@ -25,6 +29,23 @@ first. What exists today is the research/decision engine and the validation harn
 - ⬜ **Dashboard** *(planned, Phase 2–3)*
 - ⬜ **Grounded Q&A layer ("ARIA Chat")** — ask ARIA about its own signals, metrics, and decisions in English, answered only from real data via read-only tool-calls with citations — never a price prediction, never a trade *(planned, Phase 3)*
 - ⬜ **Live trading** — optional, human-gated, only after paper gates pass *(Phase 4+)*
+
+### Proof it works — 40 lines you can run
+The claim "a good backtest is usually luck" is easy to assert. [`examples/overfitting_demo.py`](examples/overfitting_demo.py)
+demonstrates it: generate 200 strategies of **pure noise**, keep the best-looking one, then judge it.
+
+```
+Tried 200 strategies of pure noise (true edge = 0.0).
+
+  Best annualised Sharpe   :  1.41   <- looks like a real strategy
+  PSR (ignores trial count):  0.998   <- 'significant!' if you forget you cherry-picked
+  Trials actually run      : 200
+  DEFLATED Sharpe (honest) :  0.465   <- accounts for 200 tries
+```
+
+A naive reading calls this a 1.41-Sharpe strategy with 99.8% confidence. The deflated Sharpe — which
+knows 200 attempts were made — puts it at a coin flip. **That gap is the entire point of the harness**,
+and it's why every trial gets logged, including the failures. (Run it: `python examples/overfitting_demo.py`.)
 
 ## Architecture
 

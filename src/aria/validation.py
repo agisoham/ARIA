@@ -13,7 +13,7 @@ train set improperly.
 """
 from __future__ import annotations
 
-from typing import Iterator
+from collections.abc import Iterator
 
 import numpy as np
 
@@ -54,7 +54,7 @@ def purged_kfold_splits(
     if n_splits < 2:
         raise ValueError("n_splits must be >= 2")
     indices = np.arange(n_samples)
-    emb = int(round(n_samples * embargo))
+    emb = round(n_samples * embargo)
     bounds = np.linspace(0, n_samples, n_splits + 1, dtype=int)
 
     for k in range(n_splits):

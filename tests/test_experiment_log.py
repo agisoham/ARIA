@@ -1,7 +1,7 @@
 import numpy as np
 
-from aria.experiment_log import ExperimentLog, Run
 from aria import metrics as m
+from aria.experiment_log import ExperimentLog, Run
 
 
 def test_counts_every_trial_kept_or_dropped(tmp_path):

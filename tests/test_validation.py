@@ -22,7 +22,7 @@ def test_purged_kfold_embargo_removes_adjacent_train():
     n, emb = 100, 0.05
     for train, test in v.purged_kfold_splits(n, n_splits=5, embargo=emb):
         assert np.intersect1d(train, test).size == 0
-        band = int(round(n * emb))
+        band = round(n * emb)
         # no training index may fall inside the embargo band around the test fold
         lo, hi = test.min() - band, test.max() + band
         assert not np.any((train >= lo) & (train <= hi))

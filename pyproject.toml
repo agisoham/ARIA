@@ -18,3 +18,13 @@ testpaths = ["tests"]
 
 [tool.ruff]
 line-length = 100
+
+[tool.ruff.lint]
+ignore = [
+    # `timezone.utc` is kept over the 3.11-only `datetime.UTC` alias so the module also runs
+    # on older interpreters — portability is worth more here than the newer spelling.
+    "UP017",
+    # Files can carry the executable bit from a Windows/OneDrive checkout; this is a library,
+    # not a set of scripts, so a missing shebang is not a defect.
+    "EXE002",
+]

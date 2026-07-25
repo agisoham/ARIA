@@ -31,6 +31,7 @@ debates/
 # (which strategies/params you tried can hint at strategy). Keep the logs local.
 experiments/
 *.runs.csv
+examples/_demo_runs.csv
 
 .pytest_cache/
 .ruff_cache/
