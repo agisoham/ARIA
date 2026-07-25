@@ -27,6 +27,11 @@ desktop.ini
 # Local output (debates are written outside the repo by default; keep any local runs out too)
 debates/
 
+# Experiment run-logs — the METHOD (src/aria/experiment_log.py) is public; the DATA is not
+# (which strategies/params you tried can hint at strategy). Keep the logs local.
+experiments/
+*.runs.csv
+
 .pytest_cache/
 .ruff_cache/
 data/

@@ -39,7 +39,9 @@ weighed and set aside (judgement, not omission).
 - ✅ **TDD / pytest · secret management (gitleaks, gitignored `.env`) · agent invariants (`AGENTS.md`)**.
 - ✅ **Rate-limit handling / backoff · OpenAI-compatible provider abstraction** — the engine's plumbing.
 - ⬜ **Vectorisation (NumPy/pandas/Polars) · numba · Parquet caching · profiling** — the backtester's speed toolkit.
-- ⬜ **Data loader · vectorised frequency-agnostic backtester · experiment tracking (SQLite → MLflow)**.
+- ✅ **Experiment tracking (trial log)** — `aria.experiment_log` records every strategy/variant tried, kept or dropped, so the deflated Sharpe's trial count is honest (unit-tested); MLflow later when experiments scale.
+- ✅ **Honest trial-counting** — the deflated Sharpe is only truthful if N counts *every* attempt including failures; log as you run.
+- ⬜ **Data loader · vectorised frequency-agnostic backtester · MLflow experiment tracking**.
 
 ## What's next, by phase
 - **Phase 1:** apply the metrics (incl. deflated Sharpe) to real paper-trading results; honest in-sample vs out-of-sample.

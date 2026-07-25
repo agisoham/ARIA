@@ -18,6 +18,7 @@ first. What exists today is the research/decision engine and the validation harn
 - ✅ **Two-layer screening** — bias-audit + red-team re-screen of every verdict
 - ✅ **Decision log** — every verdict recorded and dated
 - ✅ **Validation & metrics harness** — walk-forward + purged CV splits, and **deflated Sharpe** (the overfit test) — `src/aria/`, unit-tested
+- ✅ **Experiment log** — honest trial counting (`aria.experiment_log`): every variant tried, kept or dropped, feeds the deflated Sharpe an honest trial count
 - ⬜ **Backtester engine** — run strategies through the harness on real data *(planned, Phase 2)*
 - ⬜ **Risk Guardian** — VaR/CVaR, drawdown limits, kill-switch *(planned, Phase 2)*
 - ⬜ **Paper trading** — India + US *(planned, Phase 2–3)*
@@ -117,12 +118,15 @@ The reversal is the point: a second screening layer exists to catch the first la
 ARIA/
 ├── src/aria/             ✅ validation harness + honest metrics
 │   ├── validation.py     leakage-free splits: walk-forward, purged K-fold w/ embargo
-│   └── metrics.py        Sharpe/Sortino/drawdown + Probabilistic & Deflated Sharpe (overfit test)
+│   ├── metrics.py        Sharpe/Sortino/drawdown + Probabilistic & Deflated Sharpe (overfit test)
+│   └── experiment_log.py honest trial log — the trial count the deflated Sharpe needs
 ├── tests/                ✅ unit tests  (run: pytest -q)
 ├── llm-council/          ✅ the multi-model debate engine
 │   ├── council.py        the orchestrator (seats, two-layer screening, self-healing model IDs)
+│   ├── examples/         a synthetic example debate (Layer 1 + Layer 2 shape)
 │   └── topics/           a topic template (real strategy topics kept private)
 ├── docs/                 methodology · philosophy · roadmap · decisions · agentic-safety
+├── CONTRIBUTING.md       how to run the tests + pose a new council topic
 └── (planned) research/ + strategies   Phase 2+, not yet built
 ```
 

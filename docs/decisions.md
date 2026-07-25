@@ -4,6 +4,13 @@ Every architectural decision, debated by the council and logged. Verdicts are BU
 DEFER / DROP; a decision is "settled" only after it survives two-layer screening (a bias audit +
 red-team pass that can confirm or overturn the first verdict).
 
+## Currently open questions
+Kept here so the process is legible — each is debated when evidence exists, not before:
+- **Grounded Q&A layer / GraphRAG — the *how*** (plain tool-calls vs vector-RAG vs GraphRAG). Debated at the Phase 2→3 gate, once real signals + results exist. *(design accepted; build in Phase 3)*
+- **US-market expansion phasing** — when/whether to extend the US paper leg beyond research. *(topic ready, not yet run)*
+- **Experiment-tracking depth** — a CSV runs-log now (built); MLflow when experiments scale. *(provisional — re-run with model diversity)*
+- **RL self-learning core** — drop-leaning; not yet formally debated.
+
 | Decision | Verdict | One-line rationale |
 |---|---|---|
 | Dual Barbell split (as foundational structure) | **DEFER** | Prototype Core/Alpha isolation in paper trading before committing (re-screen confirmed). |
@@ -15,6 +22,8 @@ red-team pass that can confirm or overturn the first verdict).
 | Limit order book simulator | **DEFER** | Not justified for a solo, daily-horizon system until a strategy demands sub-close execution modelling; audit free L2/L3 data first. |
 | ML models trained on crisis data | **DROP** | ~10-event sample — near-certain overfitting. |
 | Trading frequency | **Intraday direction; HFT out of scope** | Daily/swing near-term, intraday as the sanctioned direction; true HFT ruled out for a solo/free build. Built **frequency-agnostic** so it can be dialled to minutes/seconds later without a rewrite. |
+| Experiment tracking (trial log) | **BUILD (minimal) now → MLflow later** | A CSV runs-log (`aria.experiment_log`) records every trial — kept or dropped — so the deflated Sharpe's trial count is honest; MLflow when experiments scale. |
+| Grounded Q&A layer ("ARIA Chat") | **Design accepted; build in Phase 3** | Read-only, cited, forecast-refusing English layer over ARIA's own data; the *how* (tool-calls vs GraphRAG) folds into the vector-search debate at the Phase 2→3 gate. |
 
 **Reading the pattern:** the council is skeptical of narratives and scope creep — most ideas are
 deferred until evidence exists, not adopted on a story. The two-layer screening even *reversed its

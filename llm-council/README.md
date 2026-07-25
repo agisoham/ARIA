@@ -23,9 +23,15 @@ export GITHUB_TOKEN=...            # and GOOGLE_API_KEY=... if you want Gemini s
 
 python council.py --models         # print the exact model ids your token can reach
 python council.py "Should ARIA commit to the Dual Barbell split?" --rounds 2
+
+# a reusable topic, panel picked per question:
+cp topics/_template.md topics/my-question.md   # edit it, add a `seats:` line
+python council.py --topic-file topics/my-question.md --rounds 2 --layer1-only
 ```
 
-The verdict `.md` appears in the Codex automatically.
+The verdict `.md` appears in the Codex automatically. See
+[`examples/example-debate.md`](examples/example-debate.md) for the shape a finished debate
+(Layer 1 + Layer 2) takes, and [`../CONTRIBUTING.md`](../CONTRIBUTING.md) for the full workflow.
 
 ## Notes
 - Every seat speaks the OpenAI Chat API, so all providers use one client.
@@ -49,7 +55,8 @@ Every debate file gets a "Layer 2 — Re-screening" section. Add `--layer1-only`
 
 ## Roles, reflection & calibration
 - **Panel is configurable per topic.** Available seats: `quant, risk, systems, pragmatist,
-  advocate, nlp, compliance`. Default = quant, risk, systems, pragmatist, advocate.
+  advocate, nlp, compliance, futureproof` (the Future-Proofer asks whether a choice still
+  matters in ~2 years). Default = quant, risk, systems, pragmatist, advocate.
   - Set them with `--seats quant,risk,advocate,nlp` **or** a `seats: ...` line at the top of a topic file.
 - **Advocate seat** steelmans the proposal so the board never rejects by default (fixes the
   built-in "everyone defaults to caution" bias).
