@@ -175,6 +175,7 @@ A public wiki lives in [`docs/`](docs/):
 | 5 | Aggressive Alpha sleeve | Capped, optional |
 
 Each phase is gated: capital is never deployed before the thing that protects it is proven on paper.
+Live progress: the [**ARIA Roadmap board**](https://github.com/users/agisoham/projects/3).
 
 ## Development
 Repository-wide engineering constraints and AI-development guidelines are documented in
