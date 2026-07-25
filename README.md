@@ -132,7 +132,9 @@ adopted on a story. Highlights (full log in [docs/decisions.md](docs/decisions.m
 - **Sentiment/news, stat-arb, options-pricing, order-book simulator → DEFER**, each with a concrete next
   step; **ML-trained-on-crises → DROP**.
 
-The reversal is the point: a second screening layer exists to catch the first layer's blind spots.
+The reversal is the point: a second screening layer exists to catch the first layer's blind spots — it
+**flipped 3 of the 4 verdicts it re-screened**. The measured evidence, and the method's honest
+limitations, are in [docs/methodology.md](docs/methodology.md).
 
 ## Repository structure
 ```
@@ -159,6 +161,8 @@ A public wiki lives in [`docs/`](docs/):
 - [Decision log](docs/decisions.md) — every council verdict, dated.
 - [Safe agentic development](docs/agentic-safety.md) — how an AI coding agent builds this without ever being able to touch real money.
 - [Concepts & methods](docs/concepts.md) — the quant/ML/systems methods ARIA uses and plans to (built vs planned, honestly marked).
+- [Contributing](CONTRIBUTING.md) — run the tests, pose a new council topic, the invariants any change must hold.
+- [Security](SECURITY.md) — secret handling, and why this repo cannot place a live trade.
 
 ## Roadmap (gated phases)
 | Phase | Focus | Capital at risk |

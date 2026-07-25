@@ -46,6 +46,43 @@ verdict itself:
 
 A decision is only "settled" once it survives Layer 2. Both layers are logged verbatim.
 
+## Does it actually work? The evidence
+
+A method that only *sounds* rigorous is worth nothing, so here is the measured result.
+
+**Layer 2 flipped 3 of the 4 verdicts it re-screened.** If the second layer were ceremony, it would
+rubber-stamp Layer 1. It didn't:
+
+| Decision | Layer 1 | Layer 2 | What Layer 2 caught |
+|---|---|---|---|
+| Crisis stress-test library | BUILD | **REVISE → DEFER** | The whole panel assumed free, realistic crisis-era data exists. For Indian markets it may not — and a stress test run on absent data gives *false assurance*, which is worse than no test. |
+| Barbell ratio + stress floor | DEFER | **REVISE → capped pilot** | Blanket deferral wasted the learning available from a small, strictly-capped, reversible experiment. |
+| Sentiment / news engine | DROP | **REVISE → DEFER** | DROP overshot the evidence; research and paper-testing remained justified. |
+| Dual Barbell (structure) | DEFER | **CONFIRM** | Held — the caution was warranted. |
+
+The crisis-library reversal is the one worth studying: **the first panel produced a confident,
+well-argued, and wrong verdict.** Every seat reasoned soundly from a shared false premise, and no amount
+of additional debate *within* that panel would have surfaced it. Only an adversarial pass whose explicit
+job was "name what this panel collectively missed" caught it.
+
+**A second, separate finding:** the Chair once escalated a panel of DEFERs into a DROP. That's a
+synthesis bug, not a reasoning one — which is why the calibration rule now forbids the Chair from
+exceeding the most cautious seat without stated justification. Re-running the same debate with
+calibration produced a clean DEFER.
+
+## Honest limitations
+
+- **The council is not an oracle.** It's a structured way to surface disagreement and force
+  justification. Every verdict here is a *reasoned prior*, and several are explicitly provisional.
+- **Model diversity is the real ingredient, and free tiers constrain it.** Two debates were run
+  single-model across all seats when quotas ran out; those are marked provisional and need re-running.
+  Personas alone give the *appearance* of diversity — genuine disagreement needs different model
+  families.
+- **LLM agreement is not evidence.** No verdict substitutes for out-of-sample results. The council
+  decides *what to build and test*; only the validation harness decides what's true.
+- **Two layers can still share a blind spot.** Layer 2 reduces single-pass bias; it can't eliminate
+  correlated error across models trained on overlapping data.
+
 ## Design principles learned in practice
 - **Steelman everything.** A board without an Advocate drifts toward reflexive caution.
 - **Calibrate the Chair.** Synthesis should reflect the debate, not amplify one bias.
