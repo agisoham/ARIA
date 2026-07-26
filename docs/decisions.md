@@ -22,6 +22,7 @@ Kept here so the process is legible — each is debated when evidence exists, no
 | Limit order book simulator | **DEFER** | Not justified for a solo, daily-horizon system until a strategy demands sub-close execution modelling; audit free L2/L3 data first. |
 | ML models trained on crisis data | **DROP** | ~10-event sample — near-certain overfitting. |
 | Trading frequency | **Intraday direction; HFT out of scope** | Daily/swing near-term, intraday as the sanctioned direction; true HFT ruled out for a solo/free build. Built **frequency-agnostic** so it can be dialled to minutes/seconds later without a rewrite. |
+| LLM-summarised social digest as a signal | **DROP as signal; fine as reading** | No history (untestable out-of-sample) and non-deterministic (irreproducible); an LLM producing a number the system trusts is the same failure class as an LLM placing a trade. Ranking by engagement also samples the outcome, since the loudest posts follow the move. |
 | Experiment tracking (trial log) | **BUILD (minimal) now → MLflow later** | A CSV runs-log (`aria.experiment_log`) records every trial — kept or dropped — so the deflated Sharpe's trial count is honest; MLflow when experiments scale. |
 | Grounded Q&A layer ("ARIA Chat") | **Design accepted; build in Phase 3** | Read-only, cited, forecast-refusing English layer over ARIA's own data; the *how* (tool-calls vs GraphRAG) folds into the vector-search debate at the Phase 2→3 gate. |
 

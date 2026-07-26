@@ -212,6 +212,10 @@ Everything runs on free tiers — infrastructure cost is ~zero through Phase 3 b
 - **Deliberately not used:** X/Twitter (no free tier since Feb 2026; now metered per post read — and its
   edge is *latency*, which a daily-frequency system doesn't consume), Instagram (terms prohibit automated
   collection; no market data), Telegram tip channels (adversarial noise).
+- **Not used as signal, on principle:** LLM-summarised social/news digests. They have no history (so they
+  can't be tested out-of-sample) and aren't deterministic (so the research isn't reproducible) — and an
+  LLM producing a number the system trusts is the same failure class as an LLM placing a trade. Useful to
+  *read*; never wired in. Data earns its way in only if it's historical and reproducible.
 - **Research retrieval:** arXiv q-fin (via alphaXiv), Consensus, Elicit — feeding the council's evidence base.
 - **LLM providers for the council:** GitHub Models, Google AI Studio, Groq, Cerebras — all free tiers.
 

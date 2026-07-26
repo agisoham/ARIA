@@ -32,6 +32,8 @@ weighed and set aside (judgement, not omission).
 - ⬜ **Grounded Q&A layer + provenance** — an optional English interface to query ARIA's own signals, metrics, and decisions, answered only via read-only tool-calls with citations and a grounding-check — never a price prediction, never a trade. A two-window UI shows each answer beside the exact sources it's built from.
 - ⬜ **Bayesian decision engine / Bayesian optimisation** — probability-of-success sizing; overfit-safe tuning.
 - ✎ **FinBERT sentiment · reinforcement-learning trading core** — deferred / drop-leaning (overfit traps at this scale).
+- ✎ **Backtestability as the admission test** — data may inform a strategy only if it has *history* (so it can be tested out-of-sample) and is *deterministic* (same input ⇒ same number). LLM-summarised social digests fail both, so they stay reading material and never become signal — an LLM producing a number the system trusts is the same failure class as an LLM placing a trade.
+- ✎ **Engagement bias** — ranking social posts by engagement samples the *outcome*: the loudest posts about a stock arrive after it has already moved. A cousin of look-ahead bias, disguised as sensible filtering.
 
 ## Software engineering & systems
 - ✅ **Frequency-agnostic design** — timeframe is a parameter, never hardcoded; daily today, minute/second later without a rewrite.
