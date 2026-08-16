@@ -19,6 +19,12 @@ weighed and set aside (judgement, not omission).
 - ⬜ **Transaction-cost modelling** — spread, slippage, market impact, fees; a cost-blind backtest is a red flag. Working spec: half-spread on entry (ask) plus half-spread on exit (bid) plus a flat per-trade commission, using real bid/ask where available.
 - ✎ **Kelly degeneracy** — a Kelly-derived sizer can collapse to a near-constant output regardless of conviction, at which point it is fixed sizing wearing a formula. Worth testing for explicitly before trusting fractional-Kelly deployment; conviction-tiered sizing is the fallback.
 - ⬜ **One-pipeline replay** — the backtest executes the same code path as live, replayed over historical data, so simulation and production cannot silently diverge.
+- ✎ **Hindsight narrative** — an after-the-fact causal story about why a trade worked or failed. It feels like understanding but is invented, and if a language model writes it into a trade journal, fabricated causality re-enters the decision loop disguised as documentation. The rule ARIA adopts: narrate what the *system* did, never why the *market* moved.
+
+## Reliability & operations *(planned, Phase 4+)*
+- ⬜ **Restartability over uptime** — design to be safe to crash rather than to never crash: state in a database rather than memory, idempotent operations, and a startup reconciliation that resolves drift between recorded and broker-actual positions before acting.
+- ⬜ **Broker-side resting stops** — a stop held as a condition inside a running process protects nothing once that process dies. Protective orders rest at the exchange. Enforced as an invariant in `AGENTS.md`.
+- ⬜ **Scheduled cloud execution** — free scheduled CI runners suit daily frequency; an always-on free-tier VM comes next. A machine at home shares the power and network failure domain it is meant to survive.
 - ⬜ **VaR / CVaR (Expected Shortfall)** — loss at a confidence level / expected loss beyond it; the risk engine's language.
 - ✎ **Statistical arbitrage / pairs (cointegration — Engle-Granger, Johansen; stationarity tests)** — deferred until validated.
 - ✎ **Regime detection (Hidden Markov Models)** — latent market states; a Phase-3 differentiator.

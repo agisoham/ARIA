@@ -19,6 +19,9 @@ Valuable whether the code is written by a human or an AI — these are never tra
 - **Never report backtest metrics without specifying the validation methodology** — walk-forward
   vs. purged CV, sample size, and whether the Sharpe is *deflated* for the number of trials.
 - **Every new strategy requires accompanying tests and documentation** before it counts as done.
+- **Never hold a stop-loss only in process memory.** Any live protective order must rest with the broker
+  as a real order. A stop implemented as `if price < stop` inside a running program protects nothing the
+  moment that program dies — and eventually it will. *(Blocks live execution; applies from Phase 4.)*
 
 ## Conventions
 - Python 3.11+, type hints, docstrings on public functions.

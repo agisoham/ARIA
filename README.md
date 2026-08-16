@@ -192,6 +192,7 @@ Aider, Continue…) and to human contributors.
 - Never suppress failing tests.
 - Never report backtest metrics without specifying the validation methodology.
 - Every new strategy requires accompanying tests and documentation.
+- Never hold a stop-loss only in process memory — protective orders rest with the broker.
 
 ## Compliance stance
 ARIA trades only its builder's own capital, within all applicable regulations in both target markets:
