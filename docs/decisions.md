@@ -10,6 +10,8 @@ Kept here so the process is legible — each is debated when evidence exists, no
 - **US-market expansion phasing** — when/whether to extend the US paper leg beyond research. *(topic ready, not yet run)*
 - **Experiment-tracking depth** — a CSV runs-log now (built); MLflow when experiments scale. *(provisional — re-run with model diversity)*
 - **RL self-learning core** — drop-leaning; not yet formally debated.
+- **Backtester architecture — event-driven vs vectorised.** Event-driven makes look-ahead bias structurally impossible; vectorised is far cheaper to build and adequate on daily bars. Includes a prerequisite audit of whether free tick data exists at all, which caps the useful ambition either way. *(Debated at the Phase 2→3 gate.)*
+- **Under what conditions, if any, may a learned component participate in the decision path?** Regime detection and Bayesian sizing are already planned, so the question is not "AI or no AI" but where the line sits. The working rule is an **admission test — history and determinism**: a component may inform a decision only if it can be replayed over past data and returns the same output for the same input, so the whole pipeline stays measurable by a deflated Sharpe. Non-deterministic components fail that test on instrumentation grounds, not ideological ones. *(Debated at the Phase 2→3 gate; the current invariant — no agent places or decides a trade — stands until then.)*
 
 | Decision | Verdict | One-line rationale |
 |---|---|---|

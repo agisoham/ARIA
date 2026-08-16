@@ -16,7 +16,9 @@ weighed and set aside (judgement, not omission).
 - ✅ **Momentum & mean-reversion** — the two classic strategy families (moving-average crossover; RSI / Bollinger reversion) used to validate edge honestly.
 - ✅ **Technical indicators** — SMA, EMA, MACD, RSI, Bollinger bands.
 - ✅ **Fractional Kelly sizing** — size from edge/variance (f*≈μ/σ²), scaled to tame drawdown and estimation error.
-- ⬜ **Transaction-cost modelling** — spread, slippage, market impact, fees; a cost-blind backtest is a red flag.
+- ⬜ **Transaction-cost modelling** — spread, slippage, market impact, fees; a cost-blind backtest is a red flag. Working spec: half-spread on entry (ask) plus half-spread on exit (bid) plus a flat per-trade commission, using real bid/ask where available.
+- ✎ **Kelly degeneracy** — a Kelly-derived sizer can collapse to a near-constant output regardless of conviction, at which point it is fixed sizing wearing a formula. Worth testing for explicitly before trusting fractional-Kelly deployment; conviction-tiered sizing is the fallback.
+- ⬜ **One-pipeline replay** — the backtest executes the same code path as live, replayed over historical data, so simulation and production cannot silently diverge.
 - ⬜ **VaR / CVaR (Expected Shortfall)** — loss at a confidence level / expected loss beyond it; the risk engine's language.
 - ✎ **Statistical arbitrage / pairs (cointegration — Engle-Granger, Johansen; stationarity tests)** — deferred until validated.
 - ✎ **Regime detection (Hidden Markov Models)** — latent market states; a Phase-3 differentiator.
